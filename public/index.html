@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <script src="https://kit.fontawesome.com/901297bff2.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+
+        <title>Reseplaneraren</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <form
+                        class="d-flex justify-content-center"
+                        action="/room"
+                        method="POST"
+                    >
+                        <div class="form-group col-md-6">
+                            <label for="room">Från:</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="room"
+                                placeholder="Write roomname..."
+                            />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="room">Till:</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="room"
+                                placeholder="Write roomname..."
+                            />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <form
+                        class="d-flex justify-content-left"
+                        action="/room"
+                        method="POST"
+                    >
+                        <div class="form-group col-md-3">
+                            <input
+                                type="time"
+                                class="form-control"
+                                name="room"
+                            />
+                        </div>
+                        <i class="far fa-calendar-alt fa-lg"></i>
+                    </form>
+                    <div class="d-flex align-items-center mb-3 ml-3">
+                        <button type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
