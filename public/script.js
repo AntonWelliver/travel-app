@@ -29,7 +29,6 @@ function getBusStopList(stopName, destination = true) {
     };
 
     let queryString = serialize(params);
-    console.log(queryString);
 
     axios.get(`http://localhost:5000/stop?${queryString}`)
         .then(res => {
