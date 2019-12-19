@@ -32,7 +32,16 @@ function getBusStopList(stopName, destination = true) {
 
     axios.get(`http://localhost:5000/stop?${queryString}`)
         .then(res => {
-            console.log(res);
+            let stop = res.data.stop[0];
+            if (destination === true) {
+                arrivalStopName = stop.name;
+                arrivalStopId = stop.id;
+                arrivalInput.value = arrivalStopName;
+            } else {
+                departureStopName = stop.name;
+                departureStopId = stop.id;
+                departureInput.value = departureStopName;
+            }
         })
         .catch(err => console.log(err));
 }
@@ -40,6 +49,13 @@ function getBusStopList(stopName, destination = true) {
 departureInput.addEventListener("input", e => {
     e.preventDefault();
     if (departureInput.value.length > 2) {
-        getBusStopList(departureInput.value, destination = true)
+        getBusStopList(departureInput.value, destination = false)
+    }
+});
+
+arrivalInput.addEventListener("input", e => {
+    e.preventDefault();
+    if (arrivalInput.value.length > 2) {
+        getBusStopList(arrivalInput.value, destination = true)
     }
 });

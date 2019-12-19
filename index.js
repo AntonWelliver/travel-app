@@ -63,6 +63,8 @@ app.use(express.static('public'))
 
 app.use(express.json({ extended: false }));
 
+getNewAccessToken();
+
 app.use((req, res, next) => {
     if (accessTokenIsValid === false) {
         getNewAccessToken();
@@ -72,8 +74,31 @@ app.use((req, res, next) => {
 });
 
 app.get("/stop", (req, res) => {
-    console.log(req.query.input);
-    res.json({ resultMessage: "It works" });
+    let headerConfig = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    };
+
+    let requestBody = {
+        input: req.query.input,
+        format: "json"
+    };
+
+    let queryString = serialize(requestBody);
+
+    axios
+        .get(`https://api.vasttrafik.se/bin/rest.exe/v2/location.name?${queryString}`, headerConfig)
+        .then(result => {
+            let completeStopList = result.data.LocationList.StopLocation.map(
+                item => {
+                    return { name: item.name, id: item.id };
+                }
+            );
+            let stop = completeStopList.slice(0, 1);
+            res.json({ stop: stop });
+        })
+        .catch(err => console.log(err));
 });
 
 app.listen(port, () => console.log(`Server started on port ${port}!`))
