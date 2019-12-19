@@ -3,5 +3,14 @@ body {
 }
 
 i {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
+#buttonDown {
+    margin-left: 5px;
+}
+
+#date-time {
+    margin-left: 10px;
 }

@@ -12,6 +12,8 @@
             crossorigin="anonymous"
         />
         <link rel="stylesheet" type="text/css" href="style.css" />
+        <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script defer src="script.js"></script>
 
         <title>Reseplaneraren</title>
     </head>
@@ -21,25 +23,27 @@
                 <div class="col-md-6">
                     <form
                         class="d-flex justify-content-center"
-                        action="/room"
+                        action="/"
                         method="POST"
                     >
                         <div class="form-group col-md-6">
-                            <label for="room">Från:</label>
+                            <label for="fromInput">Från:</label>
                             <input
                                 type="text"
                                 class="form-control"
-                                name="room"
-                                placeholder="Write roomname..."
+                                name="fromInput"
+                                id="departure-input"
+                                placeholder="Skriv här..."
                             />
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="room">Till:</label>
+                            <label for="toInput">Till:</label>
                             <input
                                 type="text"
                                 class="form-control"
-                                name="room"
-                                placeholder="Write roomname..."
+                                name="toInput"
+                                id="arrival-input"
+                                placeholder="Skriv här..."
                             />
                         </div>
                     </form>
@@ -51,20 +55,39 @@
                 <div class="col-md-6">
                     <form
                         class="d-flex justify-content-left"
-                        action="/room"
+                        action="/"
                         method="POST"
                     >
+                        <i class="far fa-clock"></i>
+                        <label for="dateTime" id="date-time">Datum & tid</label>
+                        <i class="fas fa-chevron-down" id="buttonDown"></i>
+                        <!-- <div class="form-group col-md-6">
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="searchInput"
+                                id="search-input"
+                            />
+                        </div> -->
+                        <!-- <div class="form-group col-md-6">
+                            <input
+                                type="date"
+                                class="form-control"
+                                name="dateInput"
+                                id="date-input"
+                            />
+                        </div>
                         <div class="form-group col-md-3">
                             <input
                                 type="time"
                                 class="form-control"
-                                name="room"
+                                name="timeInput"
+                                id="time-input"
                             />
-                        </div>
-                        <i class="far fa-calendar-alt fa-lg"></i>
+                        </div> -->
                     </form>
                     <div class="d-flex align-items-center mb-3 ml-3">
-                        <button type="submit">Search</button>
+                        <button type="submit" id="submit-button">Sök</button>
                     </div>
                 </div>
             </div>
