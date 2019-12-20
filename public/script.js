@@ -12,7 +12,6 @@ let departureStopId = "";
 let arrivalStopName = "";
 let arrivalStopId = "";
 
-// stackoverflow.com
 serialize = function (obj) {
     var str = [];
     for (var p in obj)
