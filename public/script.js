@@ -7,12 +7,16 @@ const timeInput = document.getElementById("time-input");
 const submitButton = document.getElementById("submit-button");
 const departureDropdownChoices = document.getElementById("departure-dropdown-choices");
 const arrivalDropdownChoices = document.getElementById("arrival-dropdown-choices");
+const timeDateBox = document.getElementById("time-date-box");
+const dateTimeToggle = document.getElementById("date-time-toggle");
 
 let departureStopName = "";
 let departureStopId = "";
 
 let arrivalStopName = "";
 let arrivalStopId = "";
+
+let dateTimeVisible = false;
 
 serialize = function (obj) {
     var str = [];
@@ -117,4 +121,15 @@ departureInput.addEventListener("click", e => {
 arrivalInput.addEventListener("click", e => {
     e.preventDefault();
     clearArrivalDropdown();
+});
+
+dateTimeToggle.addEventListener("click", e => {
+    e.preventDefault();
+    if (dateTimeVisible === true) {
+        dateTimeVisible = false;
+        timeDateBox.classList.add("d-none");
+    } else {
+        dateTimeVisible = true;
+        timeDateBox.classList.remove("d-none");
+    }
 });
