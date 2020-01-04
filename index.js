@@ -90,12 +90,23 @@ app.get("/stop", (req, res) => {
     axios
         .get(`https://api.vasttrafik.se/bin/rest.exe/v2/location.name?${queryString}`, headerConfig)
         .then(result => {
-            let completeStopList = result.data.LocationList.StopLocation.map(
-                item => {
-                    return { name: item.name, id: item.id };
-                }
-            );
-            let stop = completeStopList.slice(0, 1);
+            let matchingStopList = [];
+            if (result.data.LocationList.StopLocation[0] != null) {
+                matchingStopList = result.data.LocationList.StopLocation.map(
+                    item => {
+                        return { name: item.name, id: item.id };
+                    }
+                );
+            } else {
+                matchingStopList = [
+                    {
+                        name: result.data.LocationList.StopLocation.name,
+                        id: result.data.LocationList.StopLocation.id
+                    }
+                ];
+            }
+
+            let stop = matchingStopList.slice(0, 3);
             res.json({ stop: stop });
         })
         .catch(err => console.log(err));

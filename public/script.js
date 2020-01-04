@@ -5,6 +5,8 @@ const searchInput = document.getElementById("search-input");
 const dateInput = document.getElementById("date-input");
 const timeInput = document.getElementById("time-input");
 const submitButton = document.getElementById("submit-button");
+const departureDropdownChoices = document.getElementById("departure-dropdown-choices");
+const arrivalDropdownChoices = document.getElementById("arrival-dropdown-choices");
 
 let departureStopName = "";
 let departureStopId = "";
@@ -21,6 +23,40 @@ serialize = function (obj) {
     return str.join("&");
 }
 
+function departureInputDropdown(stopList) {
+    let output = "";
+
+    stopList.forEach(stop => {
+        output += `<a class="dropdown-item" href="#" data-id=${stop.id}>${stop.name}</a>`;
+    });
+    departureDropdownChoices.innerHTML = output;
+    departureDropdownChoices.classList.add("show");
+}
+
+function clearDepartureDropdown() {
+    let output = "";
+
+    departureDropdownChoices.innerHTML = output;
+    departureDropdownChoices.classList.remove("show");
+}
+
+function arrivalInputDropdown(stopList) {
+    let output = "";
+
+    stopList.forEach(stop => {
+        output += `<a class="dropdown-item" href="#" data-id=${stop.id}>${stop.name}</a>`;
+    });
+    arrivalDropdownChoices.innerHTML = output;
+    arrivalDropdownChoices.classList.add("show");
+}
+
+function clearArrivalDropdown() {
+    let output = "";
+
+    arrivalDropdownChoices.innerHTML = output;
+    arrivalDropdownChoices.classList.remove("show");
+}
+
 function getBusStopList(stopName, destination = true) {
     let params = {
         input: stopName,
@@ -31,15 +67,11 @@ function getBusStopList(stopName, destination = true) {
 
     axios.get(`http://localhost:5000/stop?${queryString}`)
         .then(res => {
-            let stop = res.data.stop[0];
+            let stopList = res.data.stop;
             if (destination === true) {
-                arrivalStopName = stop.name;
-                arrivalStopId = stop.id;
-                arrivalInput.value = arrivalStopName;
+                arrivalInputDropdown(stopList);
             } else {
-                departureStopName = stop.name;
-                departureStopId = stop.id;
-                departureInput.value = departureStopName;
+                departureInputDropdown(stopList);
             }
         })
         .catch(err => console.log(err));
@@ -52,9 +84,37 @@ departureInput.addEventListener("input", e => {
     }
 });
 
+departureDropdownChoices.addEventListener("click", e => {
+    e.preventDefault();
+
+    departureStopName = e.target.innerText;
+    departureStopId = e.target.dataset.id;
+    departureInput.value = `${departureStopName}`;
+    clearDepartureDropdown();
+});
+
 arrivalInput.addEventListener("input", e => {
     e.preventDefault();
     if (arrivalInput.value.length > 2) {
         getBusStopList(arrivalInput.value, destination = true)
     }
+});
+
+arrivalDropdownChoices.addEventListener("click", e => {
+    e.preventDefault();
+
+    arrivalStopName = e.target.innerText;
+    arrivalStopId = e.target.dataset.id;
+    arrivalInput.value = `${arrivalStopName}`;
+    clearArrivalDropdown();
+});
+
+departureInput.addEventListener("click", e => {
+    e.preventDefault();
+    clearDepartureDropdown();
+});
+
+arrivalInput.addEventListener("click", e => {
+    e.preventDefault();
+    clearArrivalDropdown();
 });
