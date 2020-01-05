@@ -9,6 +9,10 @@ const departureDropdownChoices = document.getElementById("departure-dropdown-cho
 const arrivalDropdownChoices = document.getElementById("arrival-dropdown-choices");
 const timeDateBox = document.getElementById("time-date-box");
 const dateTimeToggle = document.getElementById("date-time-toggle");
+const departureAndArrivalButtons = document.getElementById("departure-and-arrival-buttons");
+const departureButton = document.getElementById("departure-button");
+const arrivalButton = document.getElementById("arrival-button");
+const choiceButton = document.getElementById("choice-button");
 
 let departureStopName = "";
 let departureStopId = "";
@@ -17,6 +21,8 @@ let arrivalStopName = "";
 let arrivalStopId = "";
 
 let dateTimeVisible = false;
+
+let useArrivalTime = false;
 
 serialize = function (obj) {
     var str = [];
@@ -127,13 +133,33 @@ dateTimeToggle.addEventListener("click", e => {
     e.preventDefault();
     if (dateTimeVisible === true) {
         dateTimeVisible = false;
-        timeDateBox.classList.add("d-none");
         submitButton.classList.remove("d-none");
     } else {
         dateTimeVisible = true;
         timeDateBox.classList.remove("d-none");
         submitButton.classList.add("d-none");
     }
+});
+
+departureAndArrivalButtons.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.id === "departure-button") {
+        departureButton.classList.add("active");
+        arrivalButton.classList.remove("active");
+        useArrivalTime = false;
+    }
+
+    if (e.target.id === "arrival-button") {
+        arrivalButton.classList.add("active");
+        departureButton.classList.remove("active");
+        useArrivalTime = true;
+    }
+});
+
+choiceButton.addEventListener("click", e => {
+    e.preventDefault();
+    timeDateBox.classList.add("d-none");
+    submitButton.classList.remove("d-none");
 });
 
 const datePickerElement = document.querySelector(".date-picker");
