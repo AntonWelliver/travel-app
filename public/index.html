@@ -79,54 +79,91 @@
             </div>
         </div>
         <div id="time-date-box" class="container d-none">
-            <div class="btn-group ml-2">
-                <button type="button" class="btn btn-primary">Avgång</button>
-                <button type="button" class="btn btn-primary">Ankomst</button>
-            </div>
-            <div class="row">
-                <div
-                    id="date-box"
-                    class="card col-lg-4 col-md-6 col-sm-8 my-2 ml-4"
-                    style="width: 18rem;"
-                >
-                    <div class="card-body">
-                        <h5 class="card-title">Date Selector</h5>
-                        <div class="date-picker">
-                            <div class="selected-date"></div>
-                            <div class="dates">
-                                <div class="month">
-                                    <div class="arrows prev-mth">&lt;</div>
-                                    <div class="mth">July 2019</div>
-                                    <div class="arrows next-mth">&gt;</div>
+            <div class="card col-md-6">
+                <div class="card-body">
+                    <div class="btn-group ml-2">
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary"
+                            id="departure-button"
+                            aria-pressed="false"
+                        >
+                            Avgång
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary"
+                            id="arrival-button"
+                            aria-pressed="false"
+                        >
+                            Ankomst
+                        </button>
+                    </div>
+                    <button
+                        class="btn btn-primary btn-md float-right"
+                        type="submit"
+                        id="choice-button"
+                    >
+                        Välj
+                    </button>
+                    <div class="row">
+                        <div
+                            id="time-box"
+                            class="card col-lg-9 col-md-6 col-sm-8 my-2 ml-4"
+                            style="width: 18rem;"
+                        >
+                            <div class="card-body">
+                                <h5 class="card-title">Time Selector</h5>
+                                <div class="time-picker" data-time="00:00">
+                                    <div class="hour">
+                                        <div class="hr-up"></div>
+                                        <input
+                                            type="number"
+                                            class="hr"
+                                            value="00"
+                                        />
+                                        <div class="hr-down"></div>
+                                    </div>
+
+                                    <div class="separator">:</div>
+
+                                    <div class="minute">
+                                        <div class="min-up"></div>
+                                        <input
+                                            type="number"
+                                            class="min"
+                                            value="00"
+                                        />
+                                        <div class="min-down"></div>
+                                    </div>
                                 </div>
-                                <div class="days"></div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div
-                    id="time-box"
-                    class="card col-lg-4 col-md-6 col-sm-8 my-2 ml-4"
-                    style="width: 18rem;"
-                >
-                    <div class="card-body">
-                        <h5 class="card-title">Time Selector</h5>
-                        <div class="time-picker" data-time="00:00">
-                            <div class="hour">
-                                <div class="hr-up"></div>
-                                <input type="number" class="hr" value="00" />
-                                <div class="hr-down"></div>
-                            </div>
-
-                            <div class="separator">:</div>
-
-                            <div class="minute">
-                                <div class="min-up"></div>
-                                <input type="number" class="min" value="00" />
-                                <div class="min-down"></div>
+                    <div class="row">
+                        <div
+                            id="date-box"
+                            class="card col-lg-9 col-md-10 col-sm-12 my-2 ml-4"
+                            style="width: 18rem;"
+                        >
+                            <div class="card-body">
+                                <h5 class="card-title">Date Selector</h5>
+                                <div class="date-picker">
+                                    <div class="selected-date"></div>
+                                    <div class="dates">
+                                        <div class="month">
+                                            <div class="arrows prev-mth">
+                                                &lt;
+                                            </div>
+                                            <div class="mth">July 2019</div>
+                                            <div class="arrows next-mth">
+                                                &gt;
+                                            </div>
+                                        </div>
+                                        <div class="days"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
