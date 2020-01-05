@@ -160,6 +160,17 @@ choiceButton.addEventListener("click", e => {
     e.preventDefault();
     timeDateBox.classList.add("d-none");
     submitButton.classList.remove("d-none");
+
+    let output = "";
+
+    if (useArrivalTime === true) {
+        output += "Ank "
+    } else {
+        output += "Avg "
+    }
+
+    output += `${selectedDay} ${months[selectedMonth]} ${formatTime(hour)}:${formatTime(minute)}`;
+    dateTime.innerText = output;
 });
 
 const datePickerElement = document.querySelector(".date-picker");
@@ -177,18 +188,18 @@ const prevMthElement = document.querySelector(
 const daysElement = document.querySelector(".date-picker .dates .days");
 
 const months = [
-    "January",
-    "February",
-    "March",
+    "Jan",
+    "Feb",
+    "Mars",
     "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
+    "Maj",
+    "Juni",
+    "Juli",
+    "Aug",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Dec"
 ];
 
 const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
