@@ -13,6 +13,7 @@ const departureAndArrivalButtons = document.getElementById("departure-and-arriva
 const departureButton = document.getElementById("departure-button");
 const arrivalButton = document.getElementById("arrival-button");
 const choiceButton = document.getElementById("choice-button");
+const nowButton = document.getElementById("now-button");
 
 let departureStopName = "";
 let departureStopId = "";
@@ -23,6 +24,8 @@ let arrivalStopId = "";
 let dateTimeVisible = false;
 
 let useArrivalTime = false;
+
+let departureNow = true;
 
 serialize = function (obj) {
     var str = [];
@@ -160,6 +163,8 @@ choiceButton.addEventListener("click", e => {
     e.preventDefault();
     timeDateBox.classList.add("d-none");
     submitButton.classList.remove("d-none");
+    nowButton.classList.remove("d-none");
+    departureNow = false;
 
     let output = "";
 
@@ -172,6 +177,15 @@ choiceButton.addEventListener("click", e => {
     output += `${selectedDay} ${months[selectedMonth]} ${formatTime(hour)}:${formatTime(minute)}`;
     dateTime.innerText = output;
 });
+
+nowButton.addEventListener("click", e => {
+    e.preventDefault();
+    nowButton.classList.add("d-none");
+    departureNow = true;
+    let output = "Avg Nu";
+
+    dateTime.innerText = output;
+})
 
 const datePickerElement = document.querySelector(".date-picker");
 const selectedDateElement = document.querySelector(
@@ -215,6 +229,20 @@ let selectedDate = date;
 let selectedDay = day;
 let selectedMonth = month;
 let selectedYear = year;
+
+function selectCurrentDate() {
+    date = new Date();
+    day = date.getDate();
+    month = date.getMonth();
+    year = date.getFullYear();
+
+    selectedDate = date;
+    selectedDay = day;
+    selectedMonth = month;
+    selectedYear = year;
+}
+
+selectCurrentDate();
 
 //mthElement.textContent = months[month] + " " + year;
 mthElement.textContent = `${months[month]} ${year}`;
@@ -369,10 +397,19 @@ const minDown = document.querySelector(".time-picker .minute .min-down");
 
 let d = new Date();
 
-// The selected time
-let hour = d.getHours();
-let minute = d.getMinutes();
-setTime();
+let hour = "";
+let minute = "";
+
+function getCurrentTime() {
+    d = new Date();
+
+    hour = d.getHours();
+    minute = d.getMinutes();
+
+    setTime();
+}
+
+getCurrentTime();
 
 // hour up cursor
 hrUp.addEventListener("click", () => {
