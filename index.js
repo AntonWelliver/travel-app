@@ -112,4 +112,85 @@ app.get("/stop", (req, res) => {
         .catch(err => console.log(err));
 });
 
+app.get("/trip", (req, res) => {
+    let headerConfig = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    };
+
+    let requestBody = {
+        originId: departureLocationId,
+        destId: arrivalLocationId,
+        date: date,
+        time: time,
+        searchForArrival: searchForArrival,
+        numTrips: 1,
+        format: "json"
+    };
+
+    let queryString = serialize(requestBody);
+
+    axios
+        .get(`https://api.vasttrafik.se/bin/rest.exe/v2/trip?${queryString}`, headerConfig)
+        .then(result => {
+            let tripData = res.data.TripList.Trip;
+
+            let tripInfo = [];
+
+            if (tripData.Leg[0] != null) {
+                tripData.Leg.forEach(tripLeg => {
+                    let journeyDetailRef = "";
+                    if (tripLeg.JourneyDeatilRef != null) {
+                        journeyDetailRef = tripLeg.JourneyDeatilRef.ref;
+                    }
+
+                    let legInfo = {
+                        tripName: tripLeg.name,
+                        tripType: tripLeg.type,
+                        originName: tripLeg.Origin.name,
+                        originTrack: tripLeg.Origin.track,
+                        originTime: tripLeg.Origin.time,
+                        originDate: tripLeg.Origin.date,
+                        originRouteIdx: tripLeg.Origin.routeIdx,
+                        destinationName: tripLeg.Destination.name,
+                        destinationTrack: tripLeg.Destination.track,
+                        destinationTime: tripLeg.Destination.time,
+                        destinationDate: tripLeg.Destination.date,
+                        destinationRouteIdx: tripLeg.Destination.routeIdx,
+                        journeyDetailRef: journeyDetailRef
+                    };
+                    tripInfo.push(legInfo);
+                });
+            } else {
+                let tripLeg = tripData.Leg;
+
+                let journeyDetailRef = "";
+                if (tripLeg.JourneyDeatilRef != null) {
+                    journeyDetailRef = tripLeg.JourneyDeatilRef.ref;
+                }
+
+                let legInfo = {
+                    tripName: tripLeg.name,
+                    tripType: tripLeg.type,
+                    originName: tripLeg.Origin.name,
+                    originTrack: tripLeg.Origin.track,
+                    originTime: tripLeg.Origin.time,
+                    originDate: tripLeg.Origin.date,
+                    originRouteIdx: tripLeg.Origin.routeIdx,
+                    destinationName: tripLeg.Destination.name,
+                    destinationTrack: tripLeg.Destination.track,
+                    destinationTime: tripLeg.Destination.time,
+                    destinationDate: tripLeg.Destination.date,
+                    destinationRouteIdx: tripLeg.Destination.routeIdx,
+                    journeyDetailRef: journeyDetailRef
+                };
+                tripInfo.push(legInfo);
+            }
+
+            res.json({ tripInfo: tripInfo });
+        })
+        .catch(err => console.log(err));
+});
+
 app.listen(port, () => console.log(`Server started on port ${port}!`))
