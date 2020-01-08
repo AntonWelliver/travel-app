@@ -9,7 +9,7 @@ const secretKey = process.env.secretKey;
 let accessToken = "";
 let accessTokenIsValid = false;
 /* const revalidationTime = 3000 * 1000; //50min */
-const revalidationTime = 300 * 1000; //1min
+const revalidationTime = 60 * 1000; //1min
 
 serialize = function (obj) {
     var str = [];
@@ -34,10 +34,12 @@ function isTokenValid() {
 }
 
 function tokenIsInvalid() {
+    console.log("Timeout, Token is not valid ");
     accessTokenIsValid = false;
 }
 
 function getNewAccessToken() {
+    console.log("getNewAccessToken");
     let headerConfig = {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -66,7 +68,9 @@ app.use(express.json({ extended: false }));
 getNewAccessToken();
 
 app.use((req, res, next) => {
+    console.log("In Use, check if token is valid")
     if (accessTokenIsValid === false) {
+        console.log("Token is not valid, get new token");
         getNewAccessToken();
         accessTokenIsValid = true
     }
@@ -120,11 +124,11 @@ app.get("/trip", (req, res) => {
     };
 
     let requestBody = {
-        originId: departureLocationId,
-        destId: arrivalLocationId,
-        date: date,
-        time: time,
-        searchForArrival: searchForArrival,
+        originId: req.query.originId,
+        destId: req.query.destId,
+        date: req.query.date,
+        time: req.query.time,
+        searchForArrival: req.query.searchForArrival,
         numTrips: 1,
         format: "json"
     };
@@ -134,15 +138,14 @@ app.get("/trip", (req, res) => {
     axios
         .get(`https://api.vasttrafik.se/bin/rest.exe/v2/trip?${queryString}`, headerConfig)
         .then(result => {
-            let tripData = res.data.TripList.Trip;
-
+            let tripData = result.data.TripList.Trip;
             let tripInfo = [];
 
             if (tripData.Leg[0] != null) {
                 tripData.Leg.forEach(tripLeg => {
                     let journeyDetailRef = "";
-                    if (tripLeg.JourneyDeatilRef != null) {
-                        journeyDetailRef = tripLeg.JourneyDeatilRef.ref;
+                    if (tripLeg.JourneyDetailRef != null) {
+                        journeyDetailRef = tripLeg.JourneyDetailRef.ref;
                     }
 
                     let legInfo = {
@@ -166,8 +169,8 @@ app.get("/trip", (req, res) => {
                 let tripLeg = tripData.Leg;
 
                 let journeyDetailRef = "";
-                if (tripLeg.JourneyDeatilRef != null) {
-                    journeyDetailRef = tripLeg.JourneyDeatilRef.ref;
+                if (tripLeg.JourneyDetailRef != null) {
+                    journeyDetailRef = tripLeg.JourneyDetailRef.ref;
                 }
 
                 let legInfo = {

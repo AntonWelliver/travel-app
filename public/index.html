@@ -36,6 +36,7 @@
                                 name="fromInput"
                                 id="departure-input"
                                 placeholder="Skriv här..."
+                                autocomplete="off"
                             />
                             <div
                                 class="dropdown-menu"
@@ -50,6 +51,7 @@
                                 name="toInput"
                                 id="arrival-input"
                                 placeholder="Skriv här..."
+                                autocomplete="off"
                             />
                             <div
                                 class="dropdown-menu"
@@ -192,6 +194,12 @@
                             Sök
                         </button>
                     </div>
+                </div>
+            </div>
+            <div id="trip-display-box">
+                <div class="card bg-info mb-3 col-md-6">
+                    <div class="card-header">ReseInformation</div>
+                    <div id="trip-details" class="card-body"></div>
                 </div>
             </div>
         </div>

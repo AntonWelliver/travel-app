@@ -14,6 +14,10 @@ const departureButton = document.getElementById("departure-button");
 const arrivalButton = document.getElementById("arrival-button");
 const choiceButton = document.getElementById("choice-button");
 const nowButton = document.getElementById("now-button");
+const tripDisplayBox = document.getElementById("trip-display-box");
+const tripDetails = document.getElementById("trip-details");
+
+tripDisplayBox.classList.add("d-none");
 
 let departureStopName = "";
 let departureStopId = "";
@@ -26,6 +30,8 @@ let dateTimeVisible = false;
 let useArrivalTime = false;
 
 let departureNow = true;
+
+let journeyList = [];
 
 serialize = function (obj) {
     var str = [];
@@ -88,6 +94,60 @@ function getBusStopList(stopName, destination = true) {
             }
         })
         .catch(err => console.log(err));
+}
+
+function getTrip(
+    departureStopId,
+    arrivalStopId,
+    date,
+    time,
+    useArrivalTime
+) {
+    let searchForArrival = 0;
+    if (useArrivalTime === true) {
+        searchForArrival = 1;
+    }
+    let requestBody = {
+        originId: departureStopId,
+        destId: arrivalStopId,
+        date: date,
+        time: time,
+        searchForArrival: searchForArrival,
+        numTrips: 1,
+        format: "json"
+    };
+    let queryString = serialize(requestBody);
+
+    axios.get(`http://localhost:5000/trip?${queryString}`)
+        .then(res => {
+            let tripInfo = res.data.tripInfo;
+            displayTrip(tripInfo);
+        })
+        .catch(err => console.log(err));
+}
+
+function displayTrip(tripInfo) {
+    journeyList = tripInfo.slice();
+    let output = "";
+
+    output = `<h6 class="font-weight-bold">${departureStopName} till ${arrivalStopName}</h6>`;
+
+    tripInfo.forEach(tripLeg => {
+        output += `<p>${tripLeg.tripName}, ${tripLeg.tripType}:</p>`;
+        output += `<ul style="list-style-type:none">`;
+        output += `<li><small>Från ${tripLeg.originName} läge ${tripLeg.originTrack} ${tripLeg.originTime} 
+        ${tripLeg.originDate}</small></li>`;
+        output += `<li><small>Till ${tripLeg.destinationName} läge ${tripLeg.destinationTrack} 
+        ${tripLeg.destinationTime} ${tripLeg.destinationDate}</small></li>`;
+        if (tripLeg.journeyDetailRef != "") {
+            output += `<li><a href="#" class="journey-item" data-url="${tripLeg.journeyDetailRef}" 
+            data-origin="${tripLeg.originRouteIdx}" data-destination="${tripLeg.destinationRouteIdx}">
+            <i class="fas fa-route"></i></a></li>`;
+        }
+        output += `</ul>`;
+    });
+    tripDisplayBox.classList.remove("d-none");
+    tripDetails.innerHTML = output;
 }
 
 departureInput.addEventListener("input", e => {
@@ -185,7 +245,18 @@ nowButton.addEventListener("click", e => {
     let output = "Avg Nu";
 
     dateTime.innerText = output;
-})
+});
+
+submitButton.addEventListener("click", e => {
+    e.preventDefault();
+    getTrip(
+        departureStopId,
+        arrivalStopId,
+        (date = formatDateVasttrafik(selectedDate)),
+        (time = `${formatTime(hour)}:${formatTime(minute)}`),
+        (useArrivalTime)
+    );
+});
 
 const datePickerElement = document.querySelector(".date-picker");
 const selectedDateElement = document.querySelector(
@@ -382,6 +453,21 @@ function formatDate(d) {
     let year = d.getFullYear();
 
     return day + " / " + month + " / " + year;
+}
+
+function formatDateVasttrafik(d) {
+    let day = d.getDate();
+    if (day < 10) {
+        day = "0" + day;
+    }
+
+    let month = d.getMonth() + 1;
+    if (month < 10) {
+        month = "0" + month;
+    }
+    let year = d.getFullYear();
+
+    return `${year}-${month}-${day}`;
 }
 
 const timePickerElement = document.querySelector(".time-picker");
