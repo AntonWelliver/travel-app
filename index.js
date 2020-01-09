@@ -5,11 +5,27 @@ const app = express()
 const port = 5000
 const axios = require("axios")
 
+const path = require("path")
+const fs = require("fs")
+const allStops = path.join(__dirname, "localData", "all-stops.json")
+try {
+    if (fs.existsSync(allStops)) {
+        console.log("File exists");
+    } else {
+        console.log("File does not exist");
+        fs.writeFile(allStops, "Hello World", function (err) {
+            if (err) throw err;
+            console.log("Saved");
+        });
+    }
+} catch (err) {
+    console.log(err);
+}
+
 const secretKey = process.env.secretKey;
 let accessToken = "";
 let accessTokenIsValid = false;
 const revalidationTime = 3000 * 1000; //50min
-/* const revalidationTime = 60 * 1000; //1min */
 
 serialize = function (obj) {
     var str = [];
