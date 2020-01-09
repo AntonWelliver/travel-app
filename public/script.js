@@ -17,6 +17,8 @@ const nowButton = document.getElementById("now-button");
 const tripDisplayBox = document.getElementById("trip-display-box");
 const tripDetails = document.getElementById("trip-details");
 
+const serverURI = window.location.host;
+
 tripDisplayBox.classList.add("d-none");
 
 let departureStopName = "";
@@ -84,7 +86,7 @@ function getBusStopList(stopName, destination = true) {
 
     let queryString = serialize(params);
 
-    axios.get(`http://localhost:5000/stop?${queryString}`)
+    axios.get(`http://${serverURI}/stop?${queryString}`)
         .then(res => {
             let stopList = res.data.stop;
             if (destination === true) {
@@ -118,7 +120,7 @@ function getTrip(
     };
     let queryString = serialize(requestBody);
 
-    axios.get(`http://localhost:5000/trip?${queryString}`)
+    axios.get(`http://${serverURI}/trip?${queryString}`)
         .then(res => {
             let tripInfo = res.data.tripInfo;
             displayTrip(tripInfo);
@@ -249,6 +251,12 @@ nowButton.addEventListener("click", e => {
 
 submitButton.addEventListener("click", e => {
     e.preventDefault();
+
+    if (departureNow === true) {
+        getCurrentTime();
+        selectCurrentDate();
+    }
+
     getTrip(
         departureStopId,
         arrivalStopId,

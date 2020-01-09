@@ -8,8 +8,8 @@ const axios = require("axios")
 const secretKey = process.env.secretKey;
 let accessToken = "";
 let accessTokenIsValid = false;
-/* const revalidationTime = 3000 * 1000; //50min */
-const revalidationTime = 60 * 1000; //1min
+const revalidationTime = 3000 * 1000; //50min
+/* const revalidationTime = 60 * 1000; //1min */
 
 serialize = function (obj) {
     var str = [];
@@ -34,12 +34,10 @@ function isTokenValid() {
 }
 
 function tokenIsInvalid() {
-    console.log("Timeout, Token is not valid ");
     accessTokenIsValid = false;
 }
 
 function getNewAccessToken() {
-    console.log("getNewAccessToken");
     let headerConfig = {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -68,9 +66,7 @@ app.use(express.json({ extended: false }));
 getNewAccessToken();
 
 app.use((req, res, next) => {
-    console.log("In Use, check if token is valid")
     if (accessTokenIsValid === false) {
-        console.log("Token is not valid, get new token");
         getNewAccessToken();
         accessTokenIsValid = true
     }
@@ -140,6 +136,7 @@ app.get("/trip", (req, res) => {
         .then(result => {
             let tripData = result.data.TripList.Trip;
             let tripInfo = [];
+            console.log(result.status);
 
             if (tripData.Leg[0] != null) {
                 tripData.Leg.forEach(tripLeg => {
