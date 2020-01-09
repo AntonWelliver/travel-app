@@ -176,7 +176,6 @@ app.get("/trip", (req, res) => {
         .then(result => {
             let tripData = result.data.TripList.Trip;
             let tripInfo = [];
-            console.log(result.status);
 
             if (tripData.Leg[0] != null) {
                 tripData.Leg.forEach(tripLeg => {
@@ -229,6 +228,25 @@ app.get("/trip", (req, res) => {
             }
 
             res.json({ tripInfo: tripInfo });
+        })
+        .catch(err => console.log(err));
+});
+
+app.get("/journey-details", (req, res) => {
+    let headerConfig = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    };
+
+    let journeyUrl = req.query.journeyUrl;
+
+    axios
+        .get(`${journeyUrl}`, headerConfig)
+        .then(result => {
+            let journeyStops = result.data.JourneyDetail.Stop;
+
+            res.json({ journeyStops: journeyStops });
         })
         .catch(err => console.log(err));
 });

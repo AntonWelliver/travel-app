@@ -16,6 +16,7 @@ const choiceButton = document.getElementById("choice-button");
 const nowButton = document.getElementById("now-button");
 const tripDisplayBox = document.getElementById("trip-display-box");
 const tripDetails = document.getElementById("trip-details");
+const journeyDetails = document.getElementById("journey-details");
 
 const serverURI = window.location.host;
 
@@ -152,6 +153,43 @@ function displayTrip(tripInfo) {
     tripDetails.innerHTML = output;
 }
 
+function displayJourneyDetails(journey) {
+    let output = "";
+
+    output += `<ul style="list-style-type:none">`;
+    journey.forEach(stop => {
+        output += `<li>`;
+        output += `<small>${stop.journeyStop}</small>`;
+        output += `</li>`;
+    });
+
+    output += `</ul>`;
+    output += `<a href="#" class="remove-journey"><i class="fa fa-remove"></i></a>`;
+
+    journeyDetails.innerHTML = output;
+}
+
+function getJourneyStops(firstStop, lastStop, journeyUrl) {
+    let requestBody = {
+        journeyUrl: journeyUrl,
+        format: "json"
+    };
+    let queryString = serialize(requestBody);
+
+    axios.get(`http://${serverURI}/journey-details?${queryString}`)
+        .then(res => {
+            let journeyStops = res.data.journeyStops;
+            let journey = [];
+            journeyStops.forEach((journeyStop, index) => {
+                if (index >= firstStop && index <= lastStop) {
+                    journey.push({ journeyStop: journeyStop.name });
+                }
+            });
+            displayJourneyDetails(journey);
+        })
+        .catch(err => console.log(err));
+}
+
 departureInput.addEventListener("input", e => {
     e.preventDefault();
     if (departureInput.value.length > 2) {
@@ -264,6 +302,18 @@ submitButton.addEventListener("click", e => {
         (time = `${formatTime(hour)}:${formatTime(minute)}`),
         (useArrivalTime)
     );
+});
+
+tripDetails.addEventListener("click", e => {
+    e.preventDefault();
+
+    if (e.target.parentElement.classList.contains("journey-item")) {
+        let journeyUrl = e.target.parentElement.dataset.url;
+        let firstStop = e.target.parentElement.dataset.origin;
+        let lastStop = e.target.parentElement.dataset.destination;
+
+        getJourneyStops(firstStop, lastStop, journeyUrl);
+    }
 });
 
 const datePickerElement = document.querySelector(".date-picker");
