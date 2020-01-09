@@ -8,19 +8,6 @@ const axios = require("axios")
 const path = require("path")
 const fs = require("fs")
 const allStops = path.join(__dirname, "localData", "all-stops.json")
-try {
-    if (fs.existsSync(allStops)) {
-        console.log("File exists");
-    } else {
-        console.log("File does not exist");
-        fs.writeFile(allStops, "Hello World", function (err) {
-            if (err) throw err;
-            console.log("Saved");
-        });
-    }
-} catch (err) {
-    console.log(err);
-}
 
 const secretKey = process.env.secretKey;
 let accessToken = "";
@@ -43,10 +30,6 @@ function updateAccessToken(newToken) {
     setTimeout(() => {
         tokenIsInvalid();
     }, revalidationTime);
-}
-
-function isTokenValid() {
-    return accessTokenIsValid;
 }
 
 function tokenIsInvalid() {
@@ -75,11 +58,52 @@ function getNewAccessToken() {
         .catch(err => console.log(err));
 }
 
+function getAllStops() {
+    try {
+        if (fs.existsSync(allStops)) {
+
+        } else {
+            console.log("File does not exist");
+            let headerConfig = {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            };
+
+            let requestBody = {
+                format: "json"
+            };
+
+            let queryString = serialize(requestBody);
+
+            console.log("Creating json file...");
+            axios
+                .get(`https://api.vasttrafik.se/bin/rest.exe/v2/location.allstops?${queryString}`, headerConfig)
+                .then(res => {
+                    /*             let completeStopList = res.data.LocationList.StopLocation; */
+                    let stopList = res.data.LocationList.StopLocation.map(item => {
+                        return { name: item.name, id: item.id };
+                    });
+                    fs.writeFile(allStops, stopList, function (err) {
+                        if (err) throw err;
+                    });
+                })
+                .catch(err => console.log(err));
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 app.use(express.static('public'))
 
 app.use(express.json({ extended: false }));
 
 getNewAccessToken();
+
+setTimeout(() => {
+    getAllStops();
+}, 3000);
 
 app.use((req, res, next) => {
     if (accessTokenIsValid === false) {
