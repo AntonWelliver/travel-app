@@ -226,7 +226,6 @@ app.get("/trip", (req, res) => {
                 };
                 tripInfo.push(legInfo);
             }
-
             res.json({ tripInfo: tripInfo });
         })
         .catch(err => console.log(err));

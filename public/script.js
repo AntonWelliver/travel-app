@@ -138,15 +138,15 @@ function displayTrip(tripInfo) {
     tripInfo.forEach(tripLeg => {
         output += `<p>${tripLeg.tripName}, ${tripLeg.tripType}:</p>`;
         output += `<ul style="list-style-type:none">`;
-        output += `<li><small>Från ${tripLeg.originName} läge ${tripLeg.originTrack} ${tripLeg.originTime} 
-        ${tripLeg.originDate}</small></li>`;
-        output += `<li><small>Till ${tripLeg.destinationName} läge ${tripLeg.destinationTrack} 
-        ${tripLeg.destinationTime} ${tripLeg.destinationDate}</small></li>`;
         if (tripLeg.journeyDetailRef != "") {
-            output += `<li><a href="#" class="journey-item" data-url="${tripLeg.journeyDetailRef}" 
+            output += `<li><a href="#" class="journey-item float-right" data-url="${tripLeg.journeyDetailRef}" 
             data-origin="${tripLeg.originRouteIdx}" data-destination="${tripLeg.destinationRouteIdx}">
-            <i class="fas fa-route"></i></a></li>`;
+            <i class="fas fa-chevron-down list-down-icon"></i></a></li>`;
         }
+        output += `<li><p>Från ${tripLeg.originName} läge ${tripLeg.originTrack} ${tripLeg.originTime} 
+        ${tripLeg.originDate}</p></li>`;
+        output += `<li><p>Till ${tripLeg.destinationName} läge ${tripLeg.destinationTrack} 
+        ${tripLeg.destinationTime} ${tripLeg.destinationDate}</p></li>`;
         output += `</ul>`;
     });
     tripDisplayBox.classList.remove("d-none");
@@ -164,7 +164,6 @@ function displayJourneyDetails(journey) {
     });
 
     output += `</ul>`;
-    output += `<a href="#" class="remove-journey"><i class="fa fa-remove"></i></a>`;
 
     journeyDetails.innerHTML = output;
 }
