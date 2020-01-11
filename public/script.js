@@ -131,30 +131,6 @@ function getTrip(
         .catch(err => console.log(err));
 }
 
-/* function displayTrip(tripInfo) {
-    journeyList = tripInfo.slice();
-    let output = "";
-
-    output = `<h6 class="font-weight-bold">${departureStopName} till ${arrivalStopName}</h6>`;
-
-    tripInfo.forEach(tripLeg => {
-        output += `<p>${tripLeg.tripName}, ${tripLeg.tripType}:</p>`;
-        output += `<ul style="list-style-type:none">`;
-        if (tripLeg.journeyDetailRef != "") {
-            output += `<li><a href="#" class="journey-item float-right" data-url="${tripLeg.journeyDetailRef}" 
-            data-origin="${tripLeg.originRouteIdx}" data-destination="${tripLeg.destinationRouteIdx}">
-            <i class="fas fa-chevron-down list-down-icon"></i></a></li>`;
-        }
-        output += `<li><p>Från ${tripLeg.originName} läge ${tripLeg.originTrack} ${tripLeg.originTime} 
-        ${tripLeg.originDate}</p></li>`;
-        output += `<li><p>Till ${tripLeg.destinationName} läge ${tripLeg.destinationTrack} 
-        ${tripLeg.destinationTime} ${tripLeg.destinationDate}</p></li>`;
-        output += `</ul>`;
-    });
-    tripDisplayBox.classList.remove("d-none");
-    tripDetails.innerHTML = output;
-} */
-
 function displayTrip(tripInfo) {
     journeyList = tripInfo.slice();
     let index = 0;
