@@ -16,7 +16,6 @@ const choiceButton = document.getElementById("choice-button");
 const nowButton = document.getElementById("now-button");
 const tripDisplayBox = document.getElementById("trip-display-box");
 const tripDetails = document.getElementById("trip-details");
-const journeyDetails = document.getElementById("journey-details");
 
 const serverURI = window.location.host;
 
@@ -35,6 +34,9 @@ let useArrivalTime = false;
 let departureNow = true;
 
 let journeyList = [];
+
+let displayOutput = [];
+let detailsOutput = [];
 
 serialize = function (obj) {
     var str = [];
@@ -129,7 +131,7 @@ function getTrip(
         .catch(err => console.log(err));
 }
 
-function displayTrip(tripInfo) {
+/* function displayTrip(tripInfo) {
     journeyList = tripInfo.slice();
     let output = "";
 
@@ -151,9 +153,51 @@ function displayTrip(tripInfo) {
     });
     tripDisplayBox.classList.remove("d-none");
     tripDetails.innerHTML = output;
+} */
+
+function displayTrip(tripInfo) {
+    journeyList = tripInfo.slice();
+    let index = 0;
+
+    displayOutput[index] = `<h6 class="font-weight-bold">${departureStopName} till ${arrivalStopName}</h6>`;
+    detailsOutput[index] = "";
+    index++;
+
+    tripInfo.forEach(tripLeg => {
+        displayOutput[index] = `<p>${tripLeg.tripName}, ${tripLeg.tripType}:</p>`;
+        detailsOutput[index] = "";
+        index++;
+
+        displayOutput[index] = `<ul style="list-style-type:none">`;
+        detailsOutput[index] = "";
+        index++;
+
+        if (tripLeg.journeyDetailRef != "") {
+            displayOutput[index] = `<li><a href="#" class="journey-item float-right" data-url="${tripLeg.journeyDetailRef}" 
+            data-origin="${tripLeg.originRouteIdx}" data-index="${index}" data-destination="${tripLeg.destinationRouteIdx}">
+            <i class="fas fa-chevron-down list-down-icon"></i></a></li>`;
+            detailsOutput[index] = "";
+            index++;
+        }
+        displayOutput[index] = `<li><p>Från ${tripLeg.originName} läge ${tripLeg.originTrack} ${tripLeg.originTime} 
+        ${tripLeg.originDate}</p></li>`;
+        detailsOutput[index] = "";
+        index++;
+
+        displayOutput[index] = `<li><p>Till ${tripLeg.destinationName} läge ${tripLeg.destinationTrack} 
+        ${tripLeg.destinationTime} ${tripLeg.destinationDate}</p></li>`;
+        detailsOutput[index] = "";
+        index++;
+
+        displayOutput[index] = `</ul>`;
+        detailsOutput[index] = "";
+        index++;
+    });
+    tripDisplayBox.classList.remove("d-none");
+    updateDisplaytrip();
 }
 
-function displayJourneyDetails(journey) {
+function displayJourneyDetails(journey, index) {
     let output = "";
 
     output += `<ul style="list-style-type:none">`;
@@ -164,11 +208,13 @@ function displayJourneyDetails(journey) {
     });
 
     output += `</ul>`;
+    output += `<br>`;
 
-    journeyDetails.innerHTML = output;
+    detailsOutput[index + 1] = output;
+    updateDisplaytrip();
 }
 
-function getJourneyStops(firstStop, lastStop, journeyUrl) {
+function getJourneyStops(firstStop, lastStop, journeyUrl, index) {
     let requestBody = {
         journeyUrl: journeyUrl,
         format: "json"
@@ -180,13 +226,25 @@ function getJourneyStops(firstStop, lastStop, journeyUrl) {
             let journeyStops = res.data.journeyStops;
             let journey = [];
             journeyStops.forEach((journeyStop, index) => {
-                if (index >= firstStop && index <= lastStop) {
+                if (index > firstStop && index < lastStop) {
                     journey.push({ journeyStop: journeyStop.name });
                 }
             });
-            displayJourneyDetails(journey);
+            displayJourneyDetails(journey, index);
         })
         .catch(err => console.log(err));
+}
+
+function updateDisplaytrip() {
+    let output = "";
+
+    for (let index = 0; index < displayOutput.length; index++) {
+        output += displayOutput[index];
+        output += detailsOutput[index];
+    }
+
+    tripDisplayBox.classList.remove("d-none");
+    tripDetails.innerHTML = output;
 }
 
 departureInput.addEventListener("input", e => {
@@ -310,8 +368,14 @@ tripDetails.addEventListener("click", e => {
         let journeyUrl = e.target.parentElement.dataset.url;
         let firstStop = e.target.parentElement.dataset.origin;
         let lastStop = e.target.parentElement.dataset.destination;
+        let index = parseInt(e.target.parentElement.dataset.index);
 
-        getJourneyStops(firstStop, lastStop, journeyUrl);
+        if (detailsOutput[index + 1] === "") {
+            getJourneyStops(firstStop, lastStop, journeyUrl, index);
+        } else {
+            detailsOutput[index + 1] = "";
+            updateDisplaytrip();
+        }
     }
 });
 
