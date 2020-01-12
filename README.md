@@ -5,8 +5,7 @@ I det här skolprojektet har jag skapat en reseplanerare som låter användare s
 https://github.com/AntonWelliver/travel-app
 
 # Vad behövs för att köra projektet?
-1. npm install
-2. En .env fil där man lägger api nycklarna man får från Västtrafik
+Det som behövs för att du ska kunna köra detta projekt är att du kör npm install i terminalen och sen startar man projektet med kommandot node index.js. Jag har använt localhost port: 5000. Man behöver göra en .env fil där man lägger nycklarna.
 
 # Krav
 - Ni skall använda er av Västtrafiks auth 2 autentisering.
