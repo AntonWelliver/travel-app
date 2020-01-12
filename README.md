@@ -2,6 +2,12 @@
 
 I det här skolprojektet har jag skapat en reseplanerare som låter användare söka resor via Västtrafiks API. Man kan i min applikation söka på resor och, via ett gränssnitt, visa upp resultatet.
 
+https://github.com/AntonWelliver/travel-app
+
+# Vad behövs för att köra projektet?
+npm install
+en .env fil där man lägger api nycklarna man får från Västtrafik
+
 # Krav
 - Ni skall använda er av Västtrafiks auth 2 autentisering.
 - Uppdatering av access_token skall göras automatiskt då giltighetstiden för en token gått ut (tips, använd er av en egen-skapad middleware).
