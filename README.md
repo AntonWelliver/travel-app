@@ -5,8 +5,8 @@ I det här skolprojektet har jag skapat en reseplanerare som låter användare s
 https://github.com/AntonWelliver/travel-app
 
 # Vad behövs för att köra projektet?
-npm install
-en .env fil där man lägger api nycklarna man får från Västtrafik
+1. npm install
+2. En .env fil där man lägger api nycklarna man får från Västtrafik
 
 # Krav
 - Ni skall använda er av Västtrafiks auth 2 autentisering.
