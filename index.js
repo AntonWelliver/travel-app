@@ -228,7 +228,10 @@ app.get("/trip", (req, res) => {
             }
             res.json({ tripInfo: tripInfo });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            return res.json({ tripInfo: [] });
+        });
 });
 
 app.get("/journey-details", (req, res) => {

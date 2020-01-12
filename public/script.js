@@ -135,9 +135,19 @@ function displayTrip(tripInfo) {
     journeyList = tripInfo.slice();
     let index = 0;
 
-    displayOutput[index] = `<h6 class="font-weight-bold">${departureStopName} till ${arrivalStopName}</h6>`;
-    detailsOutput[index] = "";
-    index++;
+    displayOutput = [];
+    detailsOutput = [];
+
+
+    if (tripInfo.length > 0) {
+        displayOutput[index] = `<h6 class="font-weight-bold">${departureStopName} till ${arrivalStopName}</h6>`;
+        detailsOutput[index] = "";
+        index++;
+    } else {
+        displayOutput[index] = "Ingen information tillgänglig, försök senare";
+        detailsOutput[index] = "";
+        index++;
+    }
 
     tripInfo.forEach(tripLeg => {
         displayOutput[index] = `<p>${tripLeg.tripName}, ${tripLeg.tripType}:</p>`;
